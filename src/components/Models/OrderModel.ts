@@ -28,10 +28,6 @@ export class OrderModel {
   }
 
   getData(): IBuyer | null {
-    if (!this.payment) {
-      return null;
-    }
-
     return {
       payment: this.payment,
       email: this.email,
