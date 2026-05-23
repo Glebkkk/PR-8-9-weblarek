@@ -1,13 +1,15 @@
-import { IBuyer, TPayment, IBuyerErrors } from "../../types";
+import { IBuyer, TPayment, IBuyerErrors } from '../../types';
+import { IEvents } from '../base/Events';
 
 // Класс отвечает за хранение данных покупателя, которые пользователь указывает при оформлении заказа, и за их валидацию.
 
 export class OrderModel {
-
   private payment: TPayment | null = null;
   private address: string = '';
   private email: string = '';
   private phone: string = '';
+
+  constructor(protected events: IEvents) {}
 
   setData(data: Partial<IBuyer>): void {
     if (data.payment !== undefined) {
@@ -25,9 +27,15 @@ export class OrderModel {
     if (data.phone !== undefined) {
       this.phone = data.phone;
     }
+
+    this.events.emit('buyer:change', { data: this.getData() });
   }
 
   getData(): IBuyer | null {
+    if (!this.payment) {
+      return null;
+    }
+
     return {
       payment: this.payment,
       email: this.email,
@@ -41,10 +49,11 @@ export class OrderModel {
     this.address = '';
     this.email = '';
     this.phone = '';
+
+    this.events.emit('buyer:change', { data: this.getData() });
   }
 
   validate(): IBuyerErrors {
-
     const errors: IBuyerErrors = {};
 
     if (!this.payment) {
@@ -66,5 +75,3 @@ export class OrderModel {
     return errors;
   }
 }
- 
-  
