@@ -13,7 +13,7 @@ export class OrderForm extends Form<TOrderForm> {
   protected addressInput: HTMLInputElement;
 
   constructor(container: HTMLElement, events: IEvents) {
-    super(container, events);
+    super(container, events, 'order');
 
     this.paymentButtons = ensureAllElements<HTMLButtonElement>('.order__buttons button', container);
     this.addressInput = ensureElement<HTMLInputElement>('input[name="address"]', container);
@@ -23,14 +23,6 @@ export class OrderForm extends Form<TOrderForm> {
         this.events.emit('order:change', { field: 'payment', value: button.name });
       });
     });
-  }
-
-  protected onSubmit(): void {
-    this.events.emit('order:submit');
-  }
-
-  onInputChange(field: string, value: string): void {
-    this.events.emit('order:change', { field, value });
   }
 
   set payment(value: TPayment | null) {

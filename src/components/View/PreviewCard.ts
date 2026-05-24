@@ -1,13 +1,15 @@
 import { Card, TCard } from './Card';
 import { categoryMap, CDN_URL } from '../../utils/constants';
-import { IEvents } from '../base/Events';
 import { ensureElement } from '../../utils/utils';
 
 type TPreviewCard = TCard & {
   category?: string;
   image?: string;
   description?: string;
-  inBasket?: boolean;
+};
+
+type TPreviewCardActions = {
+  onAddToBasket: () => void;
 };
 
 export class PreviewCard extends Card<TPreviewCard> {
@@ -16,7 +18,7 @@ export class PreviewCard extends Card<TPreviewCard> {
   protected descriptionElement: HTMLElement;
   protected button: HTMLButtonElement;
 
-  constructor(container: HTMLElement, protected events: IEvents) {
+  constructor(container: HTMLElement, actions: TPreviewCardActions) {
     super(container);
 
     this.categoryElement = ensureElement<HTMLElement>('.card__category', container);
@@ -25,7 +27,7 @@ export class PreviewCard extends Card<TPreviewCard> {
     this.button = ensureElement<HTMLButtonElement>('.card__button', container);
 
     this.button.addEventListener('click', () => {
-      this.events.emit('basket:add', { id: this._id });
+      actions.onAddToBasket();
     });
   }
 
@@ -51,13 +53,8 @@ export class PreviewCard extends Card<TPreviewCard> {
     this.descriptionElement.textContent = value;
   }
 
-  set inBasket(value: boolean) {
-    if (value) {
-      this.button.textContent = 'В корзине';
-      this.button.disabled = true;
-    } else {
-      this.button.textContent = 'В корзину';
-      this.button.disabled = false;
-    }
+  set price(value: number | null) {
+    super.price = value;
+    this.button.disabled = value === null;
   }
 }

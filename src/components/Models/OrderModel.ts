@@ -28,14 +28,10 @@ export class OrderModel {
       this.phone = data.phone;
     }
 
-    this.events.emit('buyer:change', { data: this.getData() });
+    this.events.emit('buyer:change');
   }
 
-  getData(): IBuyer | null {
-    if (!this.payment) {
-      return null;
-    }
-
+  getData(): IBuyer {
     return {
       payment: this.payment,
       email: this.email,
@@ -50,7 +46,7 @@ export class OrderModel {
     this.email = '';
     this.phone = '';
 
-    this.events.emit('buyer:change', { data: this.getData() });
+    this.events.emit('buyer:change');
   }
 
   validate(): IBuyerErrors {

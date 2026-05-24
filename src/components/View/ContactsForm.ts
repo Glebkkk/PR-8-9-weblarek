@@ -12,18 +12,10 @@ export class ContactsForm extends Form<TContactsForm> {
   protected phoneInput: HTMLInputElement;
 
   constructor(container: HTMLElement, events: IEvents) {
-    super(container, events);
+    super(container, events, 'contacts');
 
     this.emailInput = ensureElement<HTMLInputElement>('input[name="email"]', container);
     this.phoneInput = ensureElement<HTMLInputElement>('input[name="phone"]', container);
-  }
-
-  protected onSubmit(): void {
-    this.events.emit('contacts:submit');
-  }
-
-  onInputChange(field: string, value: string): void {
-    this.events.emit('contacts:change', { field, value });
   }
 
   set email(value: string) {

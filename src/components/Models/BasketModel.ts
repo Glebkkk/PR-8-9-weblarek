@@ -13,18 +13,22 @@ export class BasketModel {
   }
 
   addItem(product: IProduct): void {
+    if (this.hasItem(product.id)) {
+      return;
+    }
+
     this.items.push(product);
-    this.events.emit('basket:change', { items: this.items });
+    this.events.emit('basket:change');
   }
 
   removeItem(id: string): void {
     this.items = this.items.filter((item) => item.id !== id);
-    this.events.emit('basket:change', { items: this.items });
+    this.events.emit('basket:change');
   }
 
   clear(): void {
     this.items = [];
-    this.events.emit('basket:change', { items: this.items });
+    this.events.emit('basket:change');
   }
 
   getTotal(): number {

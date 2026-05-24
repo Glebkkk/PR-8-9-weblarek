@@ -11,7 +11,7 @@ export class ProductCatalog {
 
   setItems(items: IProduct[]): void {
     this.items = items;
-    this.events.emit('items:change', { items: this.items });
+    this.events.emit('items:change');
   }
 
   getItems(): IProduct[] {
@@ -24,7 +24,7 @@ export class ProductCatalog {
 
   setPreview(product: IProduct): void {
     this.preview = product;
-    this.events.emit('preview:change', { preview: this.preview });
+    this.events.emit('preview:change');
   }
 
   getPreview(): IProduct | null {

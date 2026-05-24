@@ -11,7 +11,11 @@ export abstract class Form<T extends TForm> extends Component<T> {
   protected submitButton: HTMLButtonElement;
   protected errorsElement: HTMLElement;
 
-  constructor(container: HTMLElement, protected events: IEvents) {
+  constructor(
+    container: HTMLElement,
+    protected events: IEvents,
+    protected formName: string
+  ) {
     super(container);
 
     this.submitButton = ensureElement<HTMLButtonElement>('button[type="submit"]', container);
@@ -19,7 +23,7 @@ export abstract class Form<T extends TForm> extends Component<T> {
 
     container.addEventListener('submit', (event) => {
       event.preventDefault();
-      this.onSubmit();
+      this.events.emit(this.formName + ':submit');
     });
 
     container.addEventListener('input', (event) => {
@@ -30,12 +34,8 @@ export abstract class Form<T extends TForm> extends Component<T> {
     });
   }
 
-  protected onSubmit(): void {
-    this.events.emit('form:submit');
-  }
-
-  onInputChange(field: string, value: string): void {
-    this.events.emit('form:change', { field, value });
+  protected onInputChange(field: string, value: string): void {
+    this.events.emit(this.formName + ':change', { field, value });
   }
 
   set valid(value: boolean) {

@@ -1,6 +1,5 @@
 import { Card, TCard } from './Card';
 import { categoryMap, CDN_URL } from '../../utils/constants';
-import { IEvents } from '../base/Events';
 import { ensureElement } from '../../utils/utils';
 
 type TCatalogCard = TCard & {
@@ -8,18 +7,22 @@ type TCatalogCard = TCard & {
   image?: string;
 };
 
+type TCatalogCardActions = {
+  onSelect: () => void;
+};
+
 export class CatalogCard extends Card<TCatalogCard> {
   protected categoryElement: HTMLElement;
   protected imageElement: HTMLImageElement;
 
-  constructor(container: HTMLElement, protected events: IEvents) {
+  constructor(container: HTMLElement, actions: TCatalogCardActions) {
     super(container);
 
     this.categoryElement = ensureElement<HTMLElement>('.card__category', container);
     this.imageElement = ensureElement<HTMLImageElement>('.card__image', container);
 
     this.container.addEventListener('click', () => {
-      this.events.emit('card:select', { id: this._id });
+      actions.onSelect();
     });
   }
 
